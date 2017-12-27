@@ -17,7 +17,7 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
-users = pd.read_csv('C:\\Users\\vinayver\\Desktop\\Status.csv')
+users = pd.read_csv('https://github.com//vinayver198//weathertesting//Status.csv')
 
 Status = users.loc[users['EmpId'] == 134256]
 RESULT = Status.loc[users['RequestType']=='Desktop Allocation']
