@@ -10,9 +10,7 @@ import json
 import os
 import pandas as pd
 
-from flask import Flask
-from flask import request
-from flask import make_response
+from flask import Flask, request, make_response
 
 # Flask app should start in global layout
 app = Flask(__name__)
@@ -20,70 +18,51 @@ app = Flask(__name__)
 users = pd.read_csv('Status.csv')
 
 Status = users.loc[users['EmpId'] == 134256]
-RESULT = Status.loc[users['RequestType']=='Desktop Allocation']
-RequestId,Status = RESULT['RequestId'], RESULT['Status']
-print('1')
 
+RESULT = Status.loc[users['RequestType']=='Desktop Allocation']
+
+RequestId,Status = RESULT['RequestId'].values[0], RESULT['Status'].values[0]
+print(RequestId,Status)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
     req = request.get_json(silent=True, force=True)
     print("Request:")
+  
+    print("Request:")
     print(json.dumps(req, indent=4))
+    
 
-    res = processRequest(req)
+    res = makeWebhookResult(req)
 
     res = json.dumps(res, indent=4)
-    
+    print(res)
     r = make_response(res)
     r.headers['Content-Type'] = 'application/json'
     return r
 
-
-def processRequest(req):
-    action = req.get("result").get("action")
-    print(action)
-
-    if action == 'DesktopStatusCheck':
-        data = DesktopStatusCheck(req)
-        res  = makeWebhookResult(data)
-    else:
+def makeWebhookResult(req):
+    if req.get("result").get("action") != 'DesktopStatusCheck':
         return {}
-    return res
-
-def DesktopStatusCheck(req):
-   users = pd.read_csv()
-   yql_query = makeYqlQuery(req)
-   if yql_query is None:
-       return {}
-   else:
-       data = json.loads(yql_query)
-       print(data)
-       return data
-
-def makeYqlQuery(req):
     result = req.get("result")
     parameters = result.get("parameters")
     RequestType = parameters.get("Desktop")
     EmpId       = parameters.get("EmpId")
-    users = pd.read_csv('C:\\Users\\vinayver\\Desktop\\Status.csv')
+    users = pd.read_csv('C:/Users/vinayver/Desktop/Status.csv')
+
     Status = users.loc[users['EmpId'] == 134256]
     RESULT = Status.loc[users['RequestType']=='Desktop Allocation']
-    RequestId,Status = RESULT['RequestId'], RESULT['Status']
-    value = {RequestId,Status}
-    return value
-
-def makeWebhookResult(data):
-    query = data.get('query')
+    RequestId,Status = RESULT['RequestId'].values[0], RESULT['Status'].values[0]
+    #query = data.get('query')
     print("Response:")
-    print('Vinay')
-    speech = "The status for you request is"+Status+"and requestId is "+RequestId
+    
+    speech = "The status for you request is "+str(Status)+"and requestId is "+str(RequestId) + print('<a href=>"https://www.google.com">https://www.google.com</a>')
     return {
         "speech": speech,
         "displayText": speech,
         # "data": data,
         # "contextOut": [],
-        "source": "apiai-weather-webhook-sample"
+        "source": "TicketMgmtSystem"
     }
 
 
