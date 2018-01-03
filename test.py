@@ -28,7 +28,7 @@ print(RequestId,Status)
 def webhook():
     req = request.get_json(silent=True, force=True)
     print("Request:")
-  
+    print('inside webhook')
     print("Request:")
     print(json.dumps(req, indent=4))
     
@@ -42,14 +42,16 @@ def webhook():
     return r
 
 def makeWebhookResult(req):
+    print('inside makeWebhookResult')
     if req.get("result").get("action") != 'DesktopStatusCheck':
         return {}
     result = req.get("result")
     parameters = result.get("parameters")
     RequestType = parameters.get("Desktop")
     EmpId       = parameters.get("EmpId")
+    print('Above read_csv commannd')
     users = pd.read_csv('C:/Users/vinayver/Desktop/Status.csv')
-
+    print('Below read_csv command')
     Status = users.loc[users['EmpId'] == 134256]
     RESULT = Status.loc[users['RequestType']=='Desktop Allocation']
     RequestId,Status = RESULT['RequestId'].values[0], RESULT['Status'].values[0]
