@@ -58,7 +58,7 @@ def makeWebhookResult(req):
     #query = data.get('query')
     print("Response:")
     
-    speech = "The status for you request is "+str(Status)+"and requestId is "+str(RequestId) 
+    speech = "The status for you request is "+str(Status)+"and requestId is "+str(RequestId) + " https://www.google.com"
     return {
         "speech": speech,
         "displayText": speech,
