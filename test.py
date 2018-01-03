@@ -50,7 +50,7 @@ def makeWebhookResult(req):
     RequestType = parameters.get("Desktop")
     EmpId       = parameters.get("EmpId")
     print('Above read_csv commannd')
-    users = pd.read_csv('C:/Users/vinayver/Desktop/Status.csv')
+    users = pd.read_csv('Status.csv')
     print('Below read_csv command')
     Status = users.loc[users['EmpId'] == 134256]
     RESULT = Status.loc[users['RequestType']=='Desktop Allocation']
